@@ -3,7 +3,9 @@ package org.example.cs308project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.cs308project.repository.register_repository;
+import org.example.cs308project.repository.login_repository;
 import org.example.cs308project.model.register_model;
+import org.example.cs308project.model.login_model;
 
 @Service
 public class register_service {
@@ -11,22 +13,31 @@ public class register_service {
     @Autowired
     private register_repository registerRepository;
 
-    public register_model registerUser(String email, String password, String role, String category) {
-        register_model user = new register_model();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole(role);
+    @Autowired
+    private login_repository loginRepository;
 
-        if (role.equalsIgnoreCase("worker")) {
-            user.setCategory(category); // Only workers have categories
-        } else {
-            user.setCategory(null); // Customers don't have a category
-        }
+    public register_model registerUser(String email, String username, String password) {
+        // Create a new register_model instance
+        register_model newUser = new register_model();
+        newUser.setEmail(email);
+        newUser.setUsername(username);
+        newUser.setPassword(password);
 
-        return registerRepository.save(user);
+        // Save user in register_table
+        registerRepository.save(newUser);
+
+        // Now create a login_model instance for login_table
+        login_model loginUser = new login_model();
+        loginUser.setUsername(username);
+        loginUser.setPassword(password);
+
+        // Save user credentials in login_table
+        loginRepository.save(loginUser);
+
+        return newUser;
     }
 
-    public boolean userExists(String email) {
-        return registerRepository.findByEmail(email) != null;
+    public boolean userExists(String username) {
+        return registerRepository.findByUsername(username) != null;
     }
 }

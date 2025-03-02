@@ -3,14 +3,11 @@ package org.example.cs308project.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "register_table")
-public class register_model {
+@Table(name = "workers_table")
+public class workers_model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String email;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -25,14 +22,6 @@ public class register_model {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getUsername() {
